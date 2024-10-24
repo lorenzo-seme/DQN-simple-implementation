@@ -31,7 +31,7 @@ class DQNAgent:
         if len(self.memory) > self.memory_size:
             self.memory.pop(0)
         self.memory.append((state, action, reward, next_state, done))
-
+    # il nostro handler, dato lo stato decide l'azione
     def act(self, state):
         # Decide whether to explore or exploit
         state = np.array(state)  # Ensure state is an array
@@ -41,7 +41,7 @@ class DQNAgent:
         if np.random.rand() <= self.epsilon:
             return np.random.choice(self.action_size)
 
-        q_values = self.model.predict(state)
+        q_values = self.model.predict(state, verbose=0)
         return np.argmax(q_values[0])
 
     def replay(self):
@@ -61,8 +61,8 @@ class DQNAgent:
 
             target = reward
             if not done:
-                target = reward + self.gamma * np.amax(self.model.predict(next_state)[0])
-            q_values = self.model.predict(state)
+                target = reward + self.gamma * np.amax(self.model.predict(next_state, verbose=0)[0])
+            q_values = self.model.predict(state, verbose=0)
             q_values[0][action] = target
             self.model.fit(state, q_values, epochs=1, verbose=0)
         if self.epsilon > self.epsilon_min:
