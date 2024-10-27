@@ -17,6 +17,7 @@ def train_dqn(episodes=1000):
 
             total_reward = 0
 
+            # Questo accade dentro replay_bg
             with trange(500, desc=f"Episode {episode + 1}/{episodes}", position=0, leave=False) as pbar_inside:
                 for time in pbar_inside:
                     # Uncomment to render the environment (useful for debugging)
@@ -34,7 +35,7 @@ def train_dqn(episodes=1000):
                     if done:
                         break
 
-                    agent.replay()
+                agent.replay()
 
                 pbar.set_postfix({"Total reward": total_reward})
 
